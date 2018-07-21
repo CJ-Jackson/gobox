@@ -6,6 +6,10 @@ import (
 	"os/exec"
 	"strings"
 
+	"fmt"
+
+	"path"
+
 	"github.com/CJ-Jackson/gobox/tool"
 )
 
@@ -16,12 +20,19 @@ func main() {
 
 	env := tool.GetEnv()
 	file := env.ProjectBinPath() + "/" + strings.Trim(os.Args[1], "/")
+	pathEnv := fmt.Sprintf("PATH=%s", tool.FixPath(path.Dir(file)))
 
-	cmd := exec.Command(tool.FixPath(file), os.Args[2:]...)
+	cmd := exec.Command(path.Base(file), os.Args[2:]...)
+	cmd.Env = append(os.Environ(), pathEnv)
+	dir, err := os.Getwd()
+	if err != nil {
+		log.Fatalf("Could not get working directory: %s", err)
+	}
+	cmd.Dir = dir
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	cmd.Stdin = os.Stdin
-	err := cmd.Run()
+	err = cmd.Run()
 	if err != nil {
 		os.Exit(1)
 	}
