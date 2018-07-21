@@ -1,14 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"os/exec"
-	"strings"
-
-	"fmt"
-
 	"path"
+	"strings"
 
 	"github.com/CJ-Jackson/gobox/tool"
 )
