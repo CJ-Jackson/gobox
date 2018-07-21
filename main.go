@@ -17,7 +17,7 @@ func main() {
 
 	env := tool.GetEnv()
 	file := env.ProjectBinPath() + "/" + strings.Trim(os.Args[1], "/")
-	os.Setenv("PATH", tool.FixPath(path.Dir(file)))
+	tool.AppendPath(tool.FixPath(path.Dir(file)))
 
 	cmd := exec.Command(path.Base(file), os.Args[2:]...)
 	cmd.Env = os.Environ()
