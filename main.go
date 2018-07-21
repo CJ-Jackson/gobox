@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"os/exec"
@@ -18,10 +17,10 @@ func main() {
 
 	env := tool.GetEnv()
 	file := env.ProjectBinPath() + "/" + strings.Trim(os.Args[1], "/")
-	pathEnv := fmt.Sprintf("PATH=%s", tool.FixPath(path.Dir(file)))
+	os.Setenv("PATH", tool.FixPath(path.Dir(file)))
 
 	cmd := exec.Command(path.Base(file), os.Args[2:]...)
-	cmd.Env = append(os.Environ(), pathEnv)
+	cmd.Env = os.Environ()
 	dir, err := os.Getwd()
 	if err != nil {
 		log.Fatalf("Could not get working directory: %s", err)
