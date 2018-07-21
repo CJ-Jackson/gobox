@@ -11,7 +11,7 @@ func FixPath(str string) string { return strings.Replace(str, "/", "\\", -1) }
 
 func RevFixPath(str string) string { return strings.Replace(str, "\\", "/", -1) }
 
-func AppendPath(path string) {
+func PrependPath(path string) {
 	oldPath := os.Getenv("PATH")
 	os.Setenv("PATH", path+";"+oldPath)
 }

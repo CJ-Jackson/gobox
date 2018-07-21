@@ -8,7 +8,7 @@ func FixPath(str string) string { return str }
 
 func RevFixPath(str string) string { return str }
 
-func AppendPath(path string) {
+func PrependPath(path string) {
 	oldPath := os.Getenv("PATH")
 	os.Setenv("PATH", path+":"+oldPath)
 }
