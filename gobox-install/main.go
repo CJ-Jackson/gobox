@@ -79,7 +79,7 @@ func externalInstall(env tool.Env, userConfig tool.TomlSupplement) {
 
 	binPath := env.ProjectBinPath()
 	for _, module := range userConfig.Modules {
-		execCommand("vgo", []string{"get", module.RepoAndTag()}, []string{})
+		execCommand("vgo", []string{"get", "-d", module.RepoAndTag()}, []string{})
 		moduleBinPath := binPath
 		if module.BinPath != "" {
 			moduleBinPath += "/" + strings.Trim(module.BinPath, "/")
@@ -87,7 +87,7 @@ func externalInstall(env tool.Env, userConfig tool.TomlSupplement) {
 		moduleBinPath = fmt.Sprintf("GOBIN=%s", tool.FixPath(moduleBinPath))
 		for _, install := range module.Installs {
 			install = module.Repo + "/" + strings.Trim(install, "/")
-			execCommand("vgo", []string{"install", install}, []string{moduleBinPath})
+			execCommand("vgo", []string{"install", "-i", install}, []string{moduleBinPath})
 		}
 	}
 }
