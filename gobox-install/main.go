@@ -98,5 +98,8 @@ func execCommand(name string, args []string, environ []string) {
 	cmd.Stdout = os.Stdout
 	cmd.Stdin = os.Stdin
 	cmd.Stderr = os.Stderr
-	cmd.Run()
+	err := cmd.Run()
+	if err != nil {
+		log.Fatalf("Unable to run command: %s", err)
+	}
 }
