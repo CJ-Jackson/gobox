@@ -4,9 +4,8 @@ import (
 	"log"
 	"os"
 	"os/exec"
-	"strings"
-
 	"path"
+	"strings"
 
 	"github.com/BurntSushi/toml"
 	"github.com/CJ-Jackson/gobox/tool"
