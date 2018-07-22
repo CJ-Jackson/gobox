@@ -12,3 +12,5 @@ func PrependPath(path string) {
 	oldPath := os.Getenv("PATH")
 	os.Setenv("PATH", path+":"+oldPath)
 }
+
+func FixOutput(output string) string { return output }

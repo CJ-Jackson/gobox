@@ -1,11 +1,12 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"os/exec"
 	"strings"
+
+	"path"
 
 	"github.com/BurntSushi/toml"
 	"github.com/CJ-Jackson/gobox/tool"
@@ -84,10 +85,16 @@ func externalInstall(env tool.Env, userConfig tool.TomlSupplement) {
 		if module.BinPath != "" {
 			moduleBinPath += "/" + strings.Trim(module.BinPath, "/")
 		}
-		moduleBinPath = fmt.Sprintf("GOBIN=%s", tool.FixPath(moduleBinPath))
 		for _, install := range module.Installs {
-			install = module.Repo + "/" + strings.Trim(install, "/")
-			execCommand("vgo", []string{"install", "-i", install}, []string{moduleBinPath})
+			output := moduleBinPath
+			if install == "" || install == "." {
+				output += "/" + tool.FixOutput(path.Base(module.Repo))
+				install = module.Repo
+			} else {
+				output += "/" + tool.FixOutput(path.Base(install))
+				install = module.Repo + "/" + strings.Trim(install, "/")
+			}
+			execCommand("vgo", []string{"build", "-o", output, "-i", install}, []string{})
 		}
 	}
 }
