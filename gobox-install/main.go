@@ -74,7 +74,7 @@ func externalInstall(env tool.Env, userConfig tool.TomlSupplement) {
 	}
 	err := os.Chdir(sandBoxLocation)
 	if err != nil {
-		log.Fatalf("Unable to change to sandbox directory", err)
+		log.Fatalf("Unable to change to sandbox directory: %s", err)
 	}
 
 	binPath := env.ProjectBinPath()
