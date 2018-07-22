@@ -94,7 +94,7 @@ func externalInstall(env tool.Env, userConfig tool.TomlSupplement) {
 				output += "/" + tool.FixOutput(path.Base(install))
 				install = module.Repo + "/" + strings.Trim(install, "/")
 			}
-			execCommand("vgo", []string{"build", "-o", output, "-i", install}, []string{})
+			execCommand("vgo", []string{"build", "-o", tool.FixPath(output), "-i", install}, []string{})
 		}
 	}
 }
