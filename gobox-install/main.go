@@ -52,30 +52,7 @@ func localInstall(env tool.Env, userConfig tool.TomlSupplement) {
 }
 
 func externalInstall(env tool.Env, userConfig tool.TomlSupplement) {
-	sandBoxLocation := env.SandboxLocation()
-	if _, err := os.Stat(sandBoxLocation); os.IsNotExist(err) {
-		os.MkdirAll(sandBoxLocation, 0755)
-	}
-	if _, err := os.Stat(sandBoxLocation + "/main.go"); os.IsNotExist(err) {
-		file, err := os.Create(sandBoxLocation + "/main.go")
-		if err != nil {
-			log.Fatalf("Unable to create main.go: %s", err)
-		}
-		file.Write([]byte(mainGo))
-		file.Close()
-	}
-	if _, err := os.Stat(sandBoxLocation + "/go.mod"); os.IsNotExist(err) {
-		file, err := os.Create(sandBoxLocation + "/go.mod")
-		if err != nil {
-			log.Fatalf("Unable to create go.mod: %s", err)
-		}
-		file.Write([]byte(goMod))
-		file.Close()
-	}
-	err := os.Chdir(sandBoxLocation)
-	if err != nil {
-		log.Fatalf("Unable to change to sandbox directory: %s", err)
-	}
+	initSandbox(env)
 
 	binPath := env.ProjectBinPath()
 	for _, module := range userConfig.Modules {
@@ -85,17 +62,45 @@ func externalInstall(env tool.Env, userConfig tool.TomlSupplement) {
 			moduleBinPath += "/" + strings.Trim(module.BinPath, "/")
 		}
 		for _, install := range module.Installs {
-			output := moduleBinPath
-			if install == "" || install == "." {
-				output += "/" + tool.FixOutput(path.Base(module.Repo))
-				install = module.Repo
-			} else {
-				output += "/" + tool.FixOutput(path.Base(install))
-				install = module.Repo + "/" + strings.Trim(install, "/")
-			}
-			execCommand("vgo", []string{"build", "-o", tool.FixPath(output), "-i", install}, []string{})
+			installExternalModule(moduleBinPath, install, module)
 		}
 	}
+}
+
+func initSandbox(env tool.Env) {
+	sandBoxLocation := env.SandboxLocation()
+	if _, err := os.Stat(sandBoxLocation); os.IsNotExist(err) {
+		os.MkdirAll(sandBoxLocation, 0755)
+	}
+	checkIfFileExistAndCreate(sandBoxLocation, "main.go", mainGo)
+	checkIfFileExistAndCreate(sandBoxLocation, "go.mod", goMod)
+	err := os.Chdir(sandBoxLocation)
+	if err != nil {
+		log.Fatalf("Unable to change to sandbox directory: %s", err)
+	}
+}
+
+func checkIfFileExistAndCreate(sandBoxLocation string, fileName string, fileBody string) {
+	if _, err := os.Stat(sandBoxLocation + "/" + fileName); os.IsNotExist(err) {
+		file, err := os.Create(sandBoxLocation + "/" + fileName)
+		if err != nil {
+			log.Fatalf("Unable to create %s: %s", fileName, err)
+		}
+		file.Write([]byte(fileBody))
+		file.Close()
+	}
+}
+
+func installExternalModule(moduleBinPath string, install string, module tool.TomlModule) {
+	output := moduleBinPath
+	if install == "" || install == "." {
+		output += "/" + tool.FixOutput(path.Base(module.Repo))
+		install = module.Repo
+	} else {
+		output += "/" + tool.FixOutput(path.Base(install))
+		install = module.Repo + "/" + strings.Trim(install, "/")
+	}
+	execCommand("vgo", []string{"build", "-o", tool.FixPath(output), "-i", install}, []string{})
 }
 
 func execCommand(name string, args []string, environ []string) {
