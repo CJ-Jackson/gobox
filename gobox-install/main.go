@@ -54,7 +54,7 @@ func localInstall(env tool.Env, userConfig tool.TomlSupplement) {
 func externalInstall(env tool.Env, userConfig tool.TomlSupplement) {
 	sandBoxLocation := env.SandboxLocation()
 	if _, err := os.Stat(sandBoxLocation); os.IsNotExist(err) {
-		os.MkdirAll(sandBoxLocation, 0644)
+		os.MkdirAll(sandBoxLocation, 0755)
 	}
 	if _, err := os.Stat(sandBoxLocation + "/main.go"); os.IsNotExist(err) {
 		file, err := os.Create(sandBoxLocation + "/main.go")
