@@ -1,4 +1,4 @@
-package gobox
+package main
 
 import (
 	"log"
