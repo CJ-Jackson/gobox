@@ -7,25 +7,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"os"
 	"os/exec"
 	"path"
-	"runtime"
 )
 
 type Env struct {
 	GoMod string `json:"GOMOD"`
-}
-
-func userHomeDir() string {
-	env := "HOME"
-	switch runtime.GOOS {
-	case "windows":
-		env = "USERPROFILE"
-	case "plan9":
-		env = "home"
-	}
-	return os.Getenv(env)
 }
 
 func (e Env) dirPath() string { return path.Dir(RevFixPath(e.GoMod)) }
