@@ -7,6 +7,8 @@ import (
 	"path"
 	"strings"
 
+	"fmt"
+
 	"github.com/BurntSushi/toml"
 	"github.com/CJ-Jackson/gobox/tool"
 )
@@ -45,7 +47,7 @@ func main() {
 }
 
 func localInstall(env tool.Env, userConfig tool.TomlSupplement) {
-	goBin := "GOBIN=" + tool.FixPath(env.ProjectBinPath())
+	goBin := fmt.Sprintf(`GOBIN="%s"`, tool.FixPath(env.ProjectBinPath()))
 	for _, install := range userConfig.ProjectInstalls {
 		execCommand("vgo", []string{"install", install}, []string{goBin})
 	}
@@ -91,8 +93,7 @@ func checkIfFileExistAndCreate(sandBoxLocation string, fileName string, fileBody
 	}
 }
 
-func installExternalModule(moduleBinPath string, install string, module tool.TomlModule) {
-	output := moduleBinPath
+func installExternalModule(output string, install string, module tool.TomlModule) {
 	if install == "" || install == "." {
 		output += "/" + tool.FixOutput(path.Base(module.Repo))
 		install = module.Repo
