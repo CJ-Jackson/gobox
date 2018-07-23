@@ -19,9 +19,10 @@ type Env struct {
 
 func userHomeDir() string {
 	env := "HOME"
-	if runtime.GOOS == "windows" {
+	switch runtime.GOOS {
+	case "windows":
 		env = "USERPROFILE"
-	} else if runtime.GOOS == "plan9" {
+	case "plan9":
 		env = "home"
 	}
 	return os.Getenv(env)
