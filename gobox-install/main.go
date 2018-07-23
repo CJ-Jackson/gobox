@@ -112,6 +112,6 @@ func execCommand(name string, args []string, environ []string) {
 	cmd.Stderr = os.Stderr
 	err := cmd.Run()
 	if err != nil {
-		log.Fatalf("Unable to run command: %s", err)
+		log.Fatalf("Unable to run command or there was an error: %s", err)
 	}
 }
