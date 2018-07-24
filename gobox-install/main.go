@@ -1,13 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"os/exec"
 	"path"
 	"strings"
-
-	"fmt"
 
 	"github.com/BurntSushi/toml"
 	"github.com/CJ-Jackson/gobox/tool"
