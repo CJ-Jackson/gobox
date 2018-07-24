@@ -82,8 +82,9 @@ func initSandbox(env tool.Env) {
 }
 
 func checkIfFileExistAndCreate(sandBoxLocation string, fileName string, fileBody string) {
-	if _, err := os.Stat(sandBoxLocation + "/" + fileName); os.IsNotExist(err) {
-		file, err := os.Create(sandBoxLocation + "/" + fileName)
+	fullPath := sandBoxLocation + string(os.PathSeparator) + fileName
+	if _, err := os.Stat(fullPath); os.IsNotExist(err) {
+		file, err := os.Create(fullPath)
 		if err != nil {
 			log.Fatalf("Unable to create %s: %s", fileName, err)
 		}

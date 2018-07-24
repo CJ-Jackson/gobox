@@ -25,7 +25,7 @@ func (e Env) SandboxLocation() string {
 	homeDir := RevFixPath(userHomeDir())
 	hash := sha256.New()
 	hash.Write([]byte(e.GoMod))
-	return fmt.Sprintf("%s/.gobox/%s/sandbox", homeDir, base32.StdEncoding.EncodeToString(hash.Sum(nil)))
+	return FixPath(fmt.Sprintf("%s/.gobox/%s/sandbox", homeDir, base32.StdEncoding.EncodeToString(hash.Sum(nil))))
 }
 
 func GetEnv() Env {
