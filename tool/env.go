@@ -12,13 +12,13 @@ import (
 )
 
 type Env struct {
+	GoExe string `json:"GOEXE"`
 	GoMod string `json:"GOMOD"`
 }
 
 func (e Env) dirPath() string { return path.Dir(RevFixPath(e.GoMod)) }
 
-func (e Env) ProjectBinPath() string { return e.dirPath() + "/bin" }
-
+func (e Env) ProjectBinPath() string    { return e.dirPath() + "/bin" }
 func (e Env) ProjectConfigFile() string { return e.dirPath() + "/gobox.toml" }
 
 func (e Env) SandboxLocation() string {

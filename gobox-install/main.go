@@ -63,7 +63,7 @@ func externalInstall(env tool.Env, userConfig tool.TomlSupplement) {
 			moduleBinPath += "/" + strings.Trim(module.BinPath, "/")
 		}
 		for _, install := range module.Installs {
-			installExternalModule(moduleBinPath, install, module)
+			installExternalModule(env, moduleBinPath, install, module)
 		}
 	}
 }
@@ -92,14 +92,15 @@ func checkIfFileExistAndCreate(sandBoxLocation string, fileName string, fileBody
 	}
 }
 
-func installExternalModule(output string, install string, module tool.TomlModule) {
+func installExternalModule(env tool.Env, output string, install string, module tool.TomlModule) {
 	if install == "" || install == "." {
-		output += "/" + tool.FixOutput(path.Base(module.Repo))
+		output += "/" + path.Base(module.Repo)
 		install = module.Repo
 	} else {
-		output += "/" + tool.FixOutput(path.Base(install))
+		output += "/" + path.Base(install)
 		install = module.Repo + "/" + strings.Trim(install, "/")
 	}
+	output += env.GoExe
 	execCommand("vgo", []string{"build", "-o", tool.FixPath(output), "-i", install}, []string{})
 }
 
