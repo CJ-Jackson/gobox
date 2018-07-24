@@ -3,7 +3,7 @@ package tool
 import (
 	"bytes"
 	"crypto/sha256"
-	"encoding/base64"
+	"encoding/base32"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -25,7 +25,7 @@ func (e Env) SandboxLocation() string {
 	homeDir := RevFixPath(userHomeDir())
 	hash := sha256.New()
 	hash.Write([]byte(e.GoMod))
-	return fmt.Sprintf("%s/.gobox/%s/sandbox", homeDir, base64.URLEncoding.EncodeToString(hash.Sum(nil)))
+	return fmt.Sprintf("%s/.gobox/%s/sandbox", homeDir, base32.StdEncoding.EncodeToString(hash.Sum(nil)))
 }
 
 func GetEnv() Env {
