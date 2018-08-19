@@ -48,7 +48,7 @@ func main() {
 func localInstall(env tool.Env, userConfig tool.TomlSupplement) {
 	goBin := fmt.Sprintf(`GOBIN="%s"`, tool.FixPath(env.ProjectBinPath()))
 	for _, install := range userConfig.ProjectInstalls {
-		execCommand("vgo", []string{"install", install}, []string{goBin})
+		execCommand("go", []string{"install", install}, []string{goBin})
 	}
 }
 
@@ -57,7 +57,7 @@ func externalInstall(env tool.Env, userConfig tool.TomlSupplement) {
 
 	binPath := env.ProjectBinPath()
 	for _, module := range userConfig.Modules {
-		execCommand("vgo", []string{"get", "-d", module.RepoAndTag()}, []string{})
+		execCommand("go", []string{"get", "-d", module.RepoAndTag()}, []string{})
 		moduleBinPath := binPath
 		if module.BinPath != "" {
 			moduleBinPath += "/" + strings.Trim(module.BinPath, "/")
@@ -102,7 +102,7 @@ func installExternalModule(env tool.Env, output string, install string, module t
 		install = module.Repo + "/" + strings.Trim(install, "/")
 	}
 	output += env.GoExe
-	execCommand("vgo", []string{"build", "-o", tool.FixPath(output), "-i", install}, []string{})
+	execCommand("go", []string{"build", "-o", tool.FixPath(output), "-i", install}, []string{})
 }
 
 func execCommand(name string, args []string, environ []string) {
