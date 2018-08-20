@@ -8,8 +8,8 @@ import (
 	"path"
 	"strings"
 
-	"github.com/BurntSushi/toml"
 	"github.com/CJ-Jackson/gobox/tool"
+	toml "github.com/pelletier/go-toml"
 )
 
 const mainGo = `
@@ -31,7 +31,8 @@ func main() {
 	}
 
 	userConfig := tool.TomlSupplement{}
-	_, err = toml.DecodeReader(userConfigFile, &userConfig)
+
+	err = toml.NewDecoder(userConfigFile).Decode(&userConfig)
 	if err != nil {
 		log.Fatalf("Unable to parse gobox.toml: %s", err)
 	}
