@@ -31,7 +31,7 @@ func (e Env) SandboxLocation() string {
 func GetEnv() Env {
 	buf := &bytes.Buffer{}
 
-	cmd := exec.Command("vgo", "env", "-json")
+	cmd := exec.Command("go", "env", "-json")
 	cmd.Stdout = buf
 	err := cmd.Run()
 	if err != nil {
